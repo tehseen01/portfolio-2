@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 255 36% 96%;
+        --foreground: 0 0% 11%;
+
+        --primary: 250 100% 75%;
+
+        --border: 0 0% 61%;
+
+        --form-prog: 0deg;
+
+        --opacity-color: 0, 0, 0;
+
+        --purple-dark: hsl(250, 100%, 75%);
+        --purple: #9680ff;
+        --txt-gray: #494949;
+        --txt-dis: #c1c1c1;
+        --txt-fade: #6c6c6c;
+        --black: #191919;
+        --black-70: rgba(29, 29, 29, 0.7);
+        --txt-body: #2e2e2e;
+        --border-white: #d7d7d7;
+        --txt-sub: #202020;
+        --dark-theme-bg: #090909;
+        --body: 16px;
+        --navi-blur-bg: rgba(242, 240, 248, 0.2);
+    }
+
+    .dark {
+        --background: 0 0% 11%;
+        --foreground: 255 36% 96%;
+
+        --primary: 250 100% 75%;
+
+        --border: 0 0% 61%;
+
+        --opacity-color: 203, 203, 219;
+    }
+}
+
+@layer base {
+    body {
+        @apply bg-background text-foreground font-inter;
+    }
+
+    .dot-blur {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px);
+        background-size: 10px 10px;
+        backdrop-filter: blur(20px);
+    }
+
+    .conic-progress {
+        background: conic-gradient(currentColor var(--form-prog), transparent var(--form-prog), transparent 360deg);
+        transition: transform 2s ease-in-out;
+    }
+
+    .text-reveal {
+        display: inline;
+        background: linear-gradient(
+            to right,
+            rgba(var(--opacity-color), 1) 0%,
+            rgba(var(--opacity-color), 1) 50%,
+            rgba(var(--opacity-color), 0.2) 50%,
+            rgba(var(--opacity-color), 0.2) 100%
+        );
+        background-clip: text;
+        background-size: 200% 100%;
+        background-position: right bottom;
+        color: transparent;
+        background-repeat: no-repeat;
+    }
+}
