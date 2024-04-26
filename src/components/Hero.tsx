@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView, useMotionValue, useScroll, useSpring, useTransform, Variant } from 'framer-motion';
+import { AnimatePresence, motion, useInView, useScroll, useTransform } from 'framer-motion';
 
 import { About } from '../utils/interfaces';
 import { OpacityTextReveal } from './ui/Animations';
@@ -46,7 +46,12 @@ const Hero = ({ about }: HeroProps) => {
         <main className="overflow-hidden" ref={container}>
             <div className="h-[calc(100dvh_-_3.5rem)] md:h-[calc(100dvh_-_3rem)] flex flex-col justify-between px-2 md:p-8 border-b border-border">
                 <div className="pt-10 sm:pt-20">
-                    <h2 className="text-7xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none font-medium font-bebas flex sm:items-center justify-between gap-2 max-md:flex-col ">
+                    <motion.h2
+                        initial={{ opacity: 0, y: -50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-7xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none font-medium font-bebas flex sm:items-center justify-between gap-2 max-md:flex-col "
+                    >
                         <motion.span style={{ translateX: xLeft }} className="flex-1 text-nowrap">
                             Hello, I'm
                         </motion.span>{' '}
@@ -54,14 +59,25 @@ const Hero = ({ about }: HeroProps) => {
                         <motion.span style={{ translateX: xRight }} className="flex-1 text-nowrap">
                             {about.name}
                         </motion.span>
-                    </h2>
-                    <h1 className="text-8xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none text-primary font-bebas font-medium">
+                    </motion.h2>
+
+                    <motion.h1
+                        initial={{ opacity: 0, x: -100 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="text-8xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none text-primary font-bebas font-medium"
+                    >
                         {about.title}
-                    </h1>
+                    </motion.h1>
                 </div>
                 <div className="flex justify-between items-end max-md:flex-col max-md:gap-8  max-md:py-10">
-                    <div className="flex items-center md:justify-center gap-4 max-md:w-full">
-                        <div className="grid size-10 md:size-20 bg-black/90 rounded-full text-white place-items-center text-lg md:text-3xl relative">
+                    <motion.div
+                        initial={{ opacity: 0, y: 100 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="flex items-center md:justify-center gap-4 max-md:w-full"
+                    >
+                        <motion.div className="grid size-10 md:size-20 bg-black/90 rounded-full text-white place-items-center text-lg md:text-3xl relative">
                             <AnimatePresence>
                                 {toggleProjects && (
                                     <motion.span
@@ -83,7 +99,7 @@ const Hero = ({ about }: HeroProps) => {
                                     </motion.span>
                                 )}
                             </AnimatePresence>
-                        </div>
+                        </motion.div>
 
                         <div className="relative grid place-items-center h-10">
                             {toggleProjects && (
@@ -113,8 +129,15 @@ const Hero = ({ about }: HeroProps) => {
                                 )}
                             </AnimatePresence>
                         </div>
-                    </div>{' '}
-                    <h2 className="text-2xl md:text-4xl md:text-end text-balance md:w-2/5 ml-auto tracking-tight ">{about.subTitle}</h2>
+                    </motion.div>{' '}
+                    <motion.h2
+                        initial={{ opacity: 0, y: 100 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="text-2xl md:text-4xl md:text-end text-balance md:w-2/5 ml-auto tracking-tight "
+                    >
+                        {about.subTitle}
+                    </motion.h2>
                 </div>
             </div>
             <div id="about">

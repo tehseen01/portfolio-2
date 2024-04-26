@@ -17,7 +17,7 @@ const Sidebar = ({ socialHandle }: SidebarProp) => {
         <aside className="max-md:hidden relative h-full">
             <div className="sticky top-16 h-[calc(100dvh_-_4rem)] flex items-center justify-between flex-col">
                 <div className="rotate-90 mt-8 flex items-center justify-center">
-                    <p>{sectionId || 'home'}</p>
+                    <p>{sectionId}</p>
                 </div>
                 <div className="relative">
                     <motion.div
@@ -26,9 +26,21 @@ const Sidebar = ({ socialHandle }: SidebarProp) => {
                     ></motion.div>
                     <div className="h-40 w-px bg-black" />
                 </div>
-                <ul className="pb-4 space-y-2">
-                    {socialHandle.map((social) => (
-                        <li key={social._id}>
+                <motion.ul
+                    initial={{ y: 100 }}
+                    whileInView={{ y: 0 }}
+                    transition={{ delay: 0.4, type: 'spring' }}
+                    viewport={{ once: true }}
+                    className="pb-4 space-y-2"
+                >
+                    {socialHandle.map((social, index) => (
+                        <motion.li
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.4 + index * 0.1, type: 'spring' }}
+                            viewport={{ once: true }}
+                            key={social._id}
+                        >
                             <Link to={social.url} target="_blank">
                                 <img
                                     src={social.image.url}
@@ -39,9 +51,9 @@ const Sidebar = ({ socialHandle }: SidebarProp) => {
                                     className="grayscale-0 hover:scale-110 transition-transform"
                                 />
                             </Link>
-                        </li>
+                        </motion.li>
                     ))}
-                </ul>
+                </motion.ul>
             </div>
         </aside>
     );

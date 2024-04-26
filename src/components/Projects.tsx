@@ -48,13 +48,17 @@ const Projects = ({ projects }: ProjectProps) => {
             </SectionHeader>
             <div className="px-2 md:px-4">
                 <motion.div className="grid sm:grid-cols-2 gap-4 md:gap-8 py-10">
-                    {projects.slice(0, showMore ? projects.length : 4).map((project) => (
+                    {projects.slice(0, showMore ? projects.length : 4).map((project, index) => (
                         <motion.div
                             key={project._id}
                             className="relative rounded-xl group overflow-hidden"
                             onMouseEnter={() => handleMouseEnter(project._id)}
                             onMouseLeave={handleMouseLeave}
                             onClick={() => setOpenProject(project)}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.2 + 0.1 * index, type: 'spring' }}
+                            viewport={{ once: true }}
                         >
                             <div className="space-y-2 pb-4">
                                 <h3 className="text-4xl tracking-tighter font-medium">{project.title}</h3>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 import { ArrowUpRight } from './Icons';
@@ -8,6 +8,8 @@ import { SectionHeader, SectionTitle } from './ui/Section';
 import { Link } from 'react-router-dom';
 import { About, SocialHandle } from '../utils/interfaces';
 import { useSectionId } from '../utils/sectionContext';
+import Button from './ui/Button';
+import { toast } from 'sonner';
 
 interface IContact {
     email: string;
@@ -25,6 +27,8 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
 
     const containerRef = useRef(null);
 
+    const MotionLink = motion(Link);
+
     const { setSectionId } = useSectionId();
     const inView = useInView(containerRef);
 
@@ -36,6 +40,24 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
         const { name, value } = e.target;
 
         setFormValues((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const body = {
+            ...formValues,
+            toEmail: 'ayushbhardwaj5718@gmail.com',
+            toName: about.name,
+        };
+
+        try {
+            toast.success('Message send successfully!');
+            console.log(body);
+        } catch (error: any) {
+            toast.warning(error.message);
+            console.error('Error sending message:', error.message);
+        }
     };
 
     const calculateFormProgress = () => {
@@ -59,11 +81,17 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
                 <SectionTitle>Let's get started</SectionTitle>
             </SectionHeader>
             <div className="flex flex-col md:grid md:grid-cols-2 gap-4 pt-10 px-2 md:px-4">
-                <div className="row-span-2 bg-black p-6 md:p-10 rounded-2xl text-white/90 space-y-8">
-                    <div className="text-4xl tracking-tighter">
+                <form className="row-span-2 bg-black p-6 md:p-10 rounded-2xl text-white/90 space-y-8" onSubmit={handleSubmit} autoComplete="off">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: 0.2, type: 'sp' }}
+                        viewport={{ once: true }}
+                        className="text-4xl tracking-tighter"
+                    >
                         Enter your <br /> contact info
-                    </div>
-                    <form className="grid grid-cols-2 gap-4">
+                    </motion.div>
+                    <div className="grid grid-cols-2 gap-4">
                         <LineWrapper>
                             <Input placeholder="Full name" name="fullName" onChange={handleOnChange} />
                         </LineWrapper>
@@ -76,37 +104,75 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
                         <LineWrapper className="col-span-2">
                             <Textarea placeholder="Message" name="message" className="col-span-2" onChange={handleOnChange} />
                         </LineWrapper>
-                    </form>
+                    </div>
                     <div className="col-span-2 mt-6">
-                        <button className="flex items-center gap-4" disabled={checkEmptyForm !== 4}>
-                            <div className="bg-white/20 rounded-full">
-                                <motion.span
-                                    transition={{ duration: 0.4 }}
-                                    className="size-12 md:size-20 grid place-items-center text-primary rounded-full conic-progress"
-                                >
-                                    {checkEmptyForm === 4 && <ArrowUpRight className="text-white" />}
+                        <button className="flex items-center gap-4 group" disabled={checkEmptyForm !== 4}>
+                            <div className="bg-white/20 rounded-full size-12 md:size-20 grid place-items-center text-primary relative overflow-hidden z-10">
+                                <span className="absolute inset-0 w-full h-full bg-primary translate-y-full group-hover:translate-y-0 transition-transform -z-10 rounded-full" />
+                                <motion.span transition={{ duration: 0.4 }} className="overflow-hidden relative">
+                                    <ArrowUpRight className="text-white group-hover:-translate-y-full transition-transform" />
+                                    <ArrowUpRight className="text-white absolute top-0 left-0 translate-y-full group-hover:translate-y-0 transition-transform" />
                                 </motion.span>
                             </div>
-                            {checkEmptyForm === 4 && <span className="text-2xl md:text-4xl tracking-tighter">Send Message</span>}
+                            {checkEmptyForm === 4 && (
+                                <SectionTitle className="text-2xl md:text-4xl tracking-tighter font-inter">Send Message</SectionTitle>
+                            )}
                         </button>
                     </div>
-                </div>
+                </form>
                 <div className=" bg-black p-4 md:p-8 rounded-2xl text-white/90 flex justify-between flex-col">
                     <div>
                         <p className="text-white/40 tracking-tighter pb-2">Have a cool project for us?</p>
                         <LineWrapper className=" group pt-10 mb-10 w-min">
-                            <Link to={`mailto:${email}`} className="font-semibold text-2xl md:text-3xl lg:text-4xl">
-                                {email}
-                            </Link>
+                            <MotionLink to={`mailto:${email}`} className="font-semibold text-2xl md:text-3xl lg:text-4xl">
+                                {email.split('').map((char, index) => (
+                                    <motion.span
+                                        initial={{ x: 16 }}
+                                        whileInView={{ x: 0 }}
+                                        transition={{ delay: 0.1 * index, type: 'spring' }}
+                                        viewport={{ once: true }}
+                                        key={index}
+                                        className="whitespace-pre"
+                                    >
+                                        {char}
+                                    </motion.span>
+                                ))}
+                            </MotionLink>
                         </LineWrapper>
-                        <span className="text-white/50">{about.phoneNumber}</span>
-                        <p className="text-white/50">{about.address}</p>
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.3, type: 'spring' }}
+                            viewport={{ once: true }}
+                            className="text-white/50"
+                        >
+                            {about.phoneNumber}
+                        </motion.span>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.3, type: 'spring' }}
+                            viewport={{ once: true }}
+                            className="text-white/50"
+                        >
+                            {about.address}
+                        </motion.p>
                     </div>
                     <div className="flex items-center justify-between text-white/50 pt-10 flex-wrap gap-4">
-                        {socialHandles.map((social) => (
-                            <Link to={social.url} target="_blank" key={social._id} className="p-2 border border-white/10 rounded-full px-4">
-                                {social.platform}
-                            </Link>
+                        {socialHandles.map((social, index) => (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                transition={{ delay: 0.2 * index, type: 'spring' }}
+                                viewport={{ once: true }}
+                                key={social._id}
+                            >
+                                <Button className="size-auto">
+                                    <Link to={social.url} target="_blank" className="p-2 border border-white/10 rounded-full px-4 z-10">
+                                        {social.platform}
+                                    </Link>
+                                </Button>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -127,7 +193,7 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
                     </div>
                 </div>
             </div>
-            <footer className="px-2 md:px-4 pt-10">
+            <footer className="px-2 md:px-4">
                 <div className="flex items-center justify-between py-4">
                     <p>{new Date().getFullYear()} &copy; ThePortfolio</p>
                     <Link to={'https://twitter.com/tehseen_type'} target="_blank" className="hover:underline">
