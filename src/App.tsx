@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import { VariantProvider } from './utils/useVariants';
-import { SectionProvider } from './utils/sectionContext';
 import { Toaster } from 'sonner';
+import { ThemeProvider } from './utils/ThemeContext';
 
 const router = createBrowserRouter([
     {
@@ -13,12 +13,12 @@ const router = createBrowserRouter([
 
 function App() {
     return (
-        <SectionProvider>
+        <ThemeProvider>
             <VariantProvider>
                 <Toaster />
                 <RouterProvider router={router} />
             </VariantProvider>
-        </SectionProvider>
+        </ThemeProvider>
     );
 }
 

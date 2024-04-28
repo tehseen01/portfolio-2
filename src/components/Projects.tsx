@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Project } from '../utils/interfaces';
 
-import { AnimatePresence, motion, useInView } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight, Github, XMark } from './Icons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { SectionHeader, SectionTitle } from './ui/Section';
 import { useMediaQuery } from '../utils/useMediaQuery';
 import Button from './ui/Button';
 import { useVariants } from '../utils/useVariants';
 import { menuBoxes } from '../utils/animate';
-import { useSectionId } from '../utils/sectionContext';
+import DialogWrapper from './ui/DialogWrapper';
 
 interface ProjectProps {
     projects: Project[];
@@ -23,13 +23,6 @@ const Projects = ({ projects }: ProjectProps) => {
 
     const isMobile = useMediaQuery('(max-width: 768px)');
     const { setVariant } = useVariants();
-    const { setSectionId } = useSectionId();
-
-    const inView = useInView(containerRef);
-
-    useEffect(() => {
-        if (inView) setSectionId('projects');
-    }, [inView]);
 
     const handleMouseEnter = (id: string) => {
         setHover(id);
@@ -85,46 +78,35 @@ const Projects = ({ projects }: ProjectProps) => {
                 </motion.div>
                 <AnimatePresence>
                     {openProject && (
-                        <div
-                            className="fixed inset-0 md:w-[calc(100%_-_4rem)] z-50 h-[calc(100dvh_-_5rem)] mb-3 mt-auto flex items-center justify-end gap-2 md:gap-3 px-2 md:px-4"
-                            onClick={(e) => e.target === e.currentTarget && setOpenProject(null)}
-                        >
-                            <motion.div
-                                variants={menuBoxes(openProject && true)}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                className="w-full md:w-[500px] h-full bg-black text-background rounded-xl p-4 md:p-10 flex flex-col gap-4"
-                            >
-                                <div className="flex items-center justify-end md:hidden">
-                                    <button onClick={() => setOpenProject(null)}>
-                                        <XMark />
-                                    </button>
-                                </div>
-                                <img src={openProject?.image.url} alt={openProject?.title} className="aspect-video rounded-xl object-cover" />
-                                <div className="flex items-center justify-between gap-4">
-                                    <h3 className="text-3xl tracking-tighter flex-1">{openProject.title}</h3>
-                                    <Button className="bg-white/90 text-black">
-                                        <Link to={openProject.githuburl} target="_blank" className="relative z-10">
-                                            <Github />
-                                        </Link>
-                                    </Button>
-                                    <Button className="bg-white/90 text-black">
-                                        <Link to={openProject.liveurl} target="_blank" className="relative z-10">
-                                            <ArrowUpRight />
-                                        </Link>
-                                    </Button>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    {openProject.techStack.map((stack, index) => (
-                                        <motion.span key={index} className="px-2 py-1 rounded-full text-sm border border-white/30">
-                                            {stack}
-                                        </motion.span>
-                                    ))}
-                                </div>
-                                <p className="text-white/60">{openProject.description}</p>
-                            </motion.div>
-                        </div>
+                        <DialogWrapper open={openProject && true} setOpen={() => setOpenProject(null)} className="p-4 justify-start gap-4">
+                            <div className="flex items-center justify-end md:hidden">
+                                <button onClick={() => setOpenProject(null)}>
+                                    <XMark />
+                                </button>
+                            </div>
+                            <img src={openProject?.image.url} alt={openProject?.title} className="aspect-video rounded-xl object-cover" />
+                            <div className="flex items-center justify-between gap-4">
+                                <h3 className="text-3xl tracking-tighter flex-1">{openProject.title}</h3>
+                                <Button className="bg-white/90 text-black">
+                                    <Link to={openProject.githuburl} target="_blank" className="relative z-10">
+                                        <Github />
+                                    </Link>
+                                </Button>
+                                <Button className="bg-white/90 text-black">
+                                    <Link to={openProject.liveurl} target="_blank" className="relative z-10">
+                                        <ArrowUpRight />
+                                    </Link>
+                                </Button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {openProject.techStack.map((stack, index) => (
+                                    <motion.span key={index} className="px-2 py-1 rounded-full text-sm border border-white/30">
+                                        {stack}
+                                    </motion.span>
+                                ))}
+                            </div>
+                            <p className="text-white/60">{openProject.description}</p>
+                        </DialogWrapper>
                     )}
                 </AnimatePresence>
 

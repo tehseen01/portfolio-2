@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useInView, motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
 
 import { Service } from '../utils/interfaces';
 import { ArrowUpRight } from './Icons';
 import { SectionHeader, SectionTitle } from './ui/Section';
 import Button from './ui/Button';
-import { useSectionId } from '../utils/sectionContext';
 
 interface IServices {
     services: Service[];
@@ -14,13 +13,6 @@ interface IServices {
 
 const Services = ({ services }: IServices) => {
     const containerRef = useRef(null);
-
-    const { setSectionId } = useSectionId();
-    const inView = useInView(containerRef);
-
-    useEffect(() => {
-        if (inView) setSectionId('services');
-    }, [inView]);
 
     return (
         <section className="" id="services" ref={containerRef}>
@@ -40,7 +32,7 @@ const Services = ({ services }: IServices) => {
                                     <motion.span
                                         initial={{ opacity: 0 }}
                                         whileInView={{ opacity: 1 }}
-                                        transition={{ delay: 0.1 * index }}
+                                        transition={{ delay: 0.05 * index }}
                                         viewport={{ once: true }}
                                         key={index}
                                         className="whitespace-pre"

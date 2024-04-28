@@ -7,39 +7,25 @@
 
 @layer base {
     :root {
-        --background: 255 36% 96%;
-        --foreground: 0 0% 11%;
+        --background: 0 0% 100%;
+        --foreground: 60 7% 3%;
 
-        --primary: 250 100% 75%;
+        --primary: 177 61% 29%;
 
         --border: 0 0% 61%;
 
         --form-prog: 0deg;
 
         --opacity-color: 0, 0, 0;
-
-        --purple-dark: hsl(250, 100%, 75%);
-        --purple: #9680ff;
-        --txt-gray: #494949;
-        --txt-dis: #c1c1c1;
-        --txt-fade: #6c6c6c;
-        --black: #191919;
-        --black-70: rgba(29, 29, 29, 0.7);
-        --txt-body: #2e2e2e;
-        --border-white: #d7d7d7;
-        --txt-sub: #202020;
-        --dark-theme-bg: #090909;
-        --body: 16px;
-        --navi-blur-bg: rgba(242, 240, 248, 0.2);
     }
 
     .dark {
-        --background: 0 0% 11%;
+        --background: 60, 7%, 3%;
         --foreground: 255 36% 96%;
 
-        --primary: 250 100% 75%;
+        --primary: 177 61% 29%;
 
-        --border: 0 0% 61%;
+        --border: 0 1.53% 33.49%;
 
         --opacity-color: 203, 203, 219;
     }
@@ -56,9 +42,10 @@
         backdrop-filter: blur(20px);
     }
 
-    .conic-progress {
-        background: conic-gradient(currentColor var(--form-prog), transparent var(--form-prog), transparent 360deg);
-        transition: transform 2s ease-in-out;
+    .dot-blur-dark {
+        background-image: radial-gradient(rgba(190, 190, 190, 0.4) 1px, transparent 1px);
+        background-size: 10px 10px;
+        backdrop-filter: blur(20px);
     }
 
     .text-reveal {
@@ -75,5 +62,31 @@
         background-position: right bottom;
         color: transparent;
         background-repeat: no-repeat;
+    }
+
+    .hoverText {
+        transition: 0.35s font-weight, 0.35s color;
+    }
+
+    .hoverText:hover {
+        font-weight: 900;
+    }
+
+    /* To the right */
+    .hoverText:hover + .hoverText {
+        font-weight: 500;
+    }
+
+    .hoverText:hover + .hoverText + .hoverText {
+        font-weight: 300;
+    }
+
+    /* To the left */
+    .hoverText:has(+ .hoverText:hover) {
+        font-weight: 500;
+    }
+
+    .hoverText:has(+ .hoverText + .hoverText:hover) {
+        font-weight: 300;
     }
 }

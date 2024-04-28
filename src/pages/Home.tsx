@@ -11,7 +11,6 @@ import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Projects from '../components/Projects';
 import Timeline from '../components/Timeline';
-import Sidebar from '../components/Sidebar';
 
 function Home() {
     const params = useParams();
@@ -72,23 +71,19 @@ function Home() {
     const filteredTestimonials = user?.testimonials?.filter((item) => item.enabled);
     const sortedFilteredProject = user?.projects?.filter((item) => item.enabled)?.sort((a, b) => a.sequence - b.sequence);
     const filteredExperience = user?.timeline?.filter((item) => !item.forEducation && item.enabled);
+    const filteredEducation = user?.timeline?.filter((item) => item.forEducation && item.enabled);
 
     return (
         <>
             <Cursor />
             <Header />
-            <div className="md:grid grid-cols-[calc(100%-4rem)_4rem] divide-x divide-border">
-                <div>
-                    <Hero about={user.about} />
-                    <Timeline timelines={filteredExperience} />
-                    <Skills skills={sortedFilteredSkills} />
-                    <Projects projects={sortedFilteredProject} />
-                    <Services services={filteredServices} />
-                    <Testimonials testimonials={filteredTestimonials} />
-                    <Contact email={user.email} socialHandles={filteredSocialHandles} about={user.about} />
-                </div>
-                <Sidebar socialHandle={filteredSocialHandles} />
-            </div>
+            <Hero about={user.about} socialHandles={filteredSocialHandles} />
+            <Timeline experience={filteredExperience} education={filteredEducation} />
+            <Skills skills={sortedFilteredSkills} />
+            <Projects projects={sortedFilteredProject} />
+            <Services services={filteredServices} />
+            <Testimonials testimonials={filteredTestimonials} />
+            <Contact email={user.email} socialHandles={filteredSocialHandles} about={user.about} />
         </>
     );
 }

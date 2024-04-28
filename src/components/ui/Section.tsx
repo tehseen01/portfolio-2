@@ -2,7 +2,7 @@ import { HTMLMotionProps, motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 export const SectionHeader = ({ className, ...rest }: HTMLMotionProps<'div'>) => {
-    return <motion.div className={cn('dot-blur h-36 px-8 p-4 relative overflow-hidden flex items-center', className)} {...rest} />;
+    return <motion.div className={cn('dot-blur dark:dot-blur-dark h-36 px-8 p-4 relative overflow-hidden flex items-center', className)} {...rest} />;
 };
 
 export const SectionTitle = ({ className, children, ...rest }: HTMLMotionProps<'h2'>) => {
@@ -14,7 +14,7 @@ export const SectionTitle = ({ className, children, ...rest }: HTMLMotionProps<'
                     <motion.span
                         initial={{ y: 20, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.1 * index }}
+                        transition={{ delay: 0.04 * index }}
                         viewport={{ once: true }}
                         key={index}
                         className="whitespace-pre inline-block"

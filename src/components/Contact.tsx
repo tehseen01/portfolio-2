@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import { ArrowUpRight } from './Icons';
 import { LineWrapper } from './ui/Animations';
@@ -7,7 +7,6 @@ import { Input, Textarea } from './ui/Input';
 import { SectionHeader, SectionTitle } from './ui/Section';
 import { Link } from 'react-router-dom';
 import { About, SocialHandle } from '../utils/interfaces';
-import { useSectionId } from '../utils/sectionContext';
 import Button from './ui/Button';
 import { toast } from 'sonner';
 
@@ -28,13 +27,6 @@ const Contact = ({ email, socialHandles, about }: IContact) => {
     const containerRef = useRef(null);
 
     const MotionLink = motion(Link);
-
-    const { setSectionId } = useSectionId();
-    const inView = useInView(containerRef);
-
-    useEffect(() => {
-        if (inView) setSectionId('contact');
-    }, [inView]);
 
     const handleOnChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;

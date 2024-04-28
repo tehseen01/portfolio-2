@@ -1,30 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { About } from '../utils/interfaces';
+import { About, SocialHandle } from '../utils/interfaces';
 import { OpacityTextReveal } from './ui/Animations';
-import { useSectionId } from '../utils/sectionContext';
+import { Link } from 'react-router-dom';
 
 interface HeroProps {
     about: About;
+    socialHandles: SocialHandle[];
 }
 
-const Hero = ({ about }: HeroProps) => {
+const Hero = ({ about, socialHandles }: HeroProps) => {
     const [toggleProjects, setToggleProjects] = useState(false);
     const container = useRef(null);
-
-    const { scrollYProgress } = useScroll({ target: container });
-
-    const xLeft = useTransform(scrollYProgress, [0, 1], ['0%', '-100%']);
-    const xRight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-    const scaleX = useTransform(scrollYProgress, [0, 1], [1, 2]);
-
-    const { setSectionId } = useSectionId();
-    const inView = useInView(container);
-
-    useEffect(() => {
-        if (inView) setSectionId('home');
-    }, [inView]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -44,40 +32,95 @@ const Hero = ({ about }: HeroProps) => {
 
     return (
         <main className="overflow-hidden" ref={container}>
+            <div className="absolute top-60 -left-10 blur-[200px] -z-10 dark:hidden">
+                <span className="inline-block h-48 w-64 rounded-full bg-[#003cd5]"></span>
+                <span className="inline-block h-48 w-64 rounded-full bg-[#00ffa3] translate-y-28 -translate-x-28"></span>
+                <span className="inline-block h-48 w-64 rounded-full bg-[#ff8a00] -translate-x-48"></span>
+            </div>
             <div className="h-[calc(100dvh_-_3.5rem)] md:h-[calc(100dvh_-_3rem)] flex flex-col justify-between px-2 md:p-8 border-b border-border">
-                <div className="pt-10 sm:pt-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: -50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-7xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none font-medium font-bebas flex sm:items-center justify-between gap-2 max-md:flex-col "
-                    >
-                        <motion.span style={{ translateX: xLeft }} className="flex-1 text-nowrap">
-                            Hello, I'm
-                        </motion.span>{' '}
-                        <motion.span style={{ scaleX }} className="inline-block flex-1 h-4 bg-foreground max-md:hidden" />
-                        <motion.span style={{ translateX: xRight }} className="flex-1 text-nowrap">
-                            {about.name}
-                        </motion.span>
-                    </motion.h2>
-
-                    <motion.h1
-                        initial={{ opacity: 0, x: -100 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-8xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tight leading-none text-primary font-bebas font-medium"
-                    >
-                        {about.title}
-                    </motion.h1>
+                <div className="flex items-center justify-between max-md:justify-center max-md:flex-col-reverse max-md:gap-4 max-md:pt-10">
+                    <h1 className="">
+                        <span className="text-[2.5rem] md:text-[5rem] leading-none font-thin tracking-tighter overflow-hidden inline-block">
+                            {"I'm".split('').map((char, index) => (
+                                <motion.span
+                                    initial={{ y: '100%' }}
+                                    whileInView={{ y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    viewport={{ once: true }}
+                                    key={index}
+                                    className="whitespace-pre inline-block hoverText"
+                                >
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </span>{' '}
+                        <span className="text-[2.5rem] md:text-[5rem] leading-none font-thin tracking-tighter overflow-hidden inline-block">
+                            {about.name.split('').map((char, index) => (
+                                <motion.span
+                                    initial={{ y: '100%' }}
+                                    whileInView={{ y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    viewport={{ once: true }}
+                                    key={index}
+                                    className="whitespace-pre inline-block hoverText"
+                                >
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </span>
+                        <div className="inline-flex md:pl-5 items-center md:justify-center max-md:flex">
+                            <motion.img
+                                initial={{ scale: 0 }}
+                                whileInView={{ scale: 1 }}
+                                whileHover={{ scale: 1.2 }}
+                                transition={{ duration: 0.4 }}
+                                viewport={{ once: true }}
+                                src={about.avatar.url}
+                                alt={about.name}
+                                width={90}
+                                height={90}
+                                className="inline aspect-square rounded-xl object-cover origin-center"
+                            />
+                        </div>
+                        <span className="text-5xl md:text-[8rem] leading-none font-light tracking-tight font-bebas block overflow-hidden text-primary">
+                            {about.title.split('').map((char, index) => (
+                                <motion.span
+                                    initial={{ y: '100%' }}
+                                    whileInView={{ y: 0 }}
+                                    transition={{ delay: 0.5 + 0.02 * index, type: 'spring', bounce: 0.2 }}
+                                    viewport={{ once: true }}
+                                    key={index}
+                                    className="whitespace-pre inline-block"
+                                >
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </span>
+                        <span className="text-[2.5rem] md:text-[5rem] leading-none font-thin tracking-[-0.1em] md:pr-48 inline-block overflow-hidden">
+                            {about.subTitle.split('').map((char, index) => (
+                                <motion.span
+                                    initial={{ y: '100%', opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.5 + 0.01 * index, type: 'spring', bounce: 0.2 }}
+                                    viewport={{ once: true }}
+                                    key={index}
+                                    className="whitespace-pre inline-block hoverText"
+                                >
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </span>
+                    </h1>
                 </div>
-                <div className="flex justify-between items-end max-md:flex-col max-md:gap-8  max-md:py-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 100 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="flex items-center md:justify-center gap-4 max-md:w-full"
-                    >
-                        <motion.div className="grid size-10 md:size-20 bg-black/90 rounded-full text-white place-items-center text-lg md:text-3xl relative">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    viewport={{ once: true }}
+                    className="flex justify-between max-md:gap-8  max-md:py-10"
+                >
+                    <div className="flex items-center md:justify-center gap-4 max-md:w-full max-md:hidden">
+                        <motion.div className="grid size-10 md:size-16 bg-black/90 rounded-full text-white place-items-center text-lg md:text-3xl relative">
                             <AnimatePresence>
                                 {toggleProjects && (
                                     <motion.span
@@ -129,16 +172,23 @@ const Hero = ({ about }: HeroProps) => {
                                 )}
                             </AnimatePresence>
                         </div>
-                    </motion.div>{' '}
-                    <motion.h2
-                        initial={{ opacity: 0, y: 100 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-2xl md:text-4xl md:text-end text-balance md:w-2/5 ml-auto tracking-tight "
-                    >
-                        {about.subTitle}
-                    </motion.h2>
-                </div>
+                    </div>
+                    <ul className="flex items-center justify-center gap-5 pt-4">
+                        {socialHandles.map((social, index) => (
+                            <motion.li
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                transition={{ delay: 0.4 + index * 0.1, type: 'spring' }}
+                                viewport={{ once: true }}
+                                key={social._id}
+                            >
+                                <Link to={social.url} target="_blank">
+                                    <span>{social.platform}</span>
+                                </Link>
+                            </motion.li>
+                        ))}
+                    </ul>
+                </motion.div>
             </div>
             <div id="about">
                 <p className="text-2xl md:text-5xl leading-tight text-balance font-medium tracking-tighter py-20 px-2 md:px-8 ">

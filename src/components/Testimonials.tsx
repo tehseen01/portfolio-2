@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { cn } from '../utils/cn';
 import { Testimonial } from '../utils/interfaces';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useVariants } from '../utils/useVariants';
-import { useSectionId } from '../utils/sectionContext';
 
 interface TestimonialProps {
     testimonials: Testimonial[];
@@ -13,13 +12,6 @@ const Testimonials = ({ testimonials }: TestimonialProps) => {
     const [activeCard, setActiveCard] = useState(0);
     const { setVariant } = useVariants();
     const containerRef = useRef(null);
-
-    const { setSectionId } = useSectionId();
-    const inView = useInView(containerRef);
-
-    useEffect(() => {
-        if (inView) setSectionId('testimonials');
-    }, [inView]);
 
     const handleNextClick = () => {
         setActiveCard((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
@@ -88,7 +80,7 @@ const Testimonials = ({ testimonials }: TestimonialProps) => {
                 {testimonials.map((_, index) => (
                     <button
                         key={index}
-                        className={cn('size-2 rounded-full bg-black/20', activeCard === index && 'bg-black')}
+                        className={cn('size-2 rounded-full bg-black/20 dark:bg-white/50', activeCard === index && 'bg-black dark:bg-white')}
                         onClick={() => setActiveCard(index)}
                     />
                 ))}
